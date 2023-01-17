@@ -382,12 +382,26 @@ pulumi.export(
 )
 
 pulumi.export(
-    "githubcredentials",
+    "githubwebappcredentials",
     pulumi.Output.all(
         cicd_application.application_id,
         cicd_application_password.value,
         current_subscription.subscription_id,
-        b2c_tenant.tenant_id,
+        resource_group.name,
+        AZURE_WEBAPP_NAME,
+        'AZURE_WEBAPP_CREDENTIALS'
+    ).apply(lambda args: create_azure_credentials(*args)),
+)
+
+pulumi.export(
+    "githubfunctionappcredentials",
+    pulumi.Output.all(
+        cicd_application.application_id,
+        cicd_application_password.value,
+        current_subscription.subscription_id,
+        resource_group.name,
+        AZURE_FUNCTIONAPP_NAME,
+        'AZURE_FUNCTIONAPP_CREDENTIALS'
     ).apply(lambda args: create_azure_credentials(*args)),
 )
 
