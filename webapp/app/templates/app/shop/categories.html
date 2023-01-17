@@ -1,0 +1,45 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title %}Categories{% endblock %}
+{% block content %}
+    <div class="album py-5">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                {% for el, category in categories %}
+                    <div class="col" id="{{ el }}">
+                        <div class="card shadow-sm">
+                            <img class="card-img-top"
+                                 src="{{ category.image.url }}"
+                                 alt="{{ category.name }}"
+                                 width="100%"
+                                 height="225"
+                                 focusable="false"/>
+                            <div class="card-body">
+                                <p class="card-title" id="category_name{{ el }}">{{ category.name }}</p>
+                                <p class="card-text" id="category_description{{ el }}">{{ category.description }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a href="{% url 'get_products_in_category' category.slug %}"
+                                           id="view_category{{ el }}"
+                                           class="btn btn-sm btn-outline-secondary">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="mx-auto">
+                {% if categories.paginator.num_pages > 1 %}
+                    <hr />
+                    <div class="text-center">
+                        {% for pg in categories.paginator.page_range %}
+                            <a href="?page={{pg}}"
+                               class="btn btn-light btn-sm {% if categories.number == pg %}active{% endif %}">{{ pg }}</a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

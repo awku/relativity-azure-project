@@ -1,0 +1,4 @@
+name: azure-project-tenant
+runtime:
+  name: python
+description: A minimal Azure Native Python Pulumi program

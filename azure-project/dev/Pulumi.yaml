@@ -1,0 +1,4 @@
+name: azure-project-dev
+runtime:
+  name: python
+description: A minimal Azure Native Python Pulumi program

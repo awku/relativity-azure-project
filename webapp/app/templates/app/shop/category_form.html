@@ -1,0 +1,53 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <div class="container px-5 my-5">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+                <input class="form-control"
+                       id="name"
+                       name="name"
+                       type="text"
+                       value="{{ category.name }}"
+                       data-sb-validations="required"/>
+                <label for="name">Name</label>
+                <div class="invalid-feedback" data-sb-feedback="name:required">Name is required.</div>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control"
+                       id="slug"
+                       name="slug"
+                       type="text"
+                       value="{{ category.slug }}"
+                       data-sb-validations="required"/>
+                <label for="slug">Slug</label>
+                <div class="invalid-feedback" data-sb-feedback="slug:required">Slug is required.</div>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea class="form-control"
+                          id="description"
+                          name="description"
+                          type="text"
+                          value="{{ category.description }}"
+                          style="height: 10rem"></textarea>
+                <label for="description">Description</label>
+            </div>
+            <div class="mb-3">
+                <label for="image">Image</label>
+                <input class="form-control"
+                       id="image"
+                       name="image"
+                       type="file"
+                       accept="image/*"/>
+            </div>
+            <div class="d-none" id="submitErrorMessage">
+                <div class="text-center text-danger mb-3">{{ error }}</div>
+            </div>
+            <div class="d-grid">
+                <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

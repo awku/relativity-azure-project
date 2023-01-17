@@ -1,0 +1,28 @@
+{
+    "azure_host": "<AZURE_HOST_PLACEHOLDER>",
+    "azure_aad_b2c_tenant": {
+        "client_id": "<AZURE_AAD_B2C_TENANT_CLIENT_ID_PLACEHOLDER>",
+        "client_credential": "<AZURE_AAD_B2C_TENANT_CLIENT_CREDENTIAL_PLACEHOLDER>",
+        "tenant_name": "<AZURE_AAD_B2C_TENANT_NAME_PLACEHOLDER>",
+        "tenant_id": "<AZURE_AAD_B2C_TENANT_ID_PLACEHOLDER>",
+    },
+    "azure_blob_storage": {
+        "account_name": "<AZURE_BLOB_STORAGE_ACCOUNT_NAME_PLACEHOLDER>",
+        "account_media_key": "<AZURE_BLOB_STORAGE_ACCOUNT_MEDIA_KEY_PLACEHOLDER>",
+        "account_static_key": "<AZURE_BLOB_STORAGE_ACCOUNT_STATIC_KEY_PLACEHOLDER>",
+        "azure_media_container": "<AZURE_BLOB_STORAGE_MEDIA_CONTAINER_PLACEHOLDER>",
+        "azure_static_container": "<AZURE_BLOB_STORAGE_STATIC_CONTAINER_PLACEHOLDER>"
+    },
+    "azure_cosmos_database": {
+        "host": "<AZURE_COSMOS_DATABASE_HOST>",
+        "username": "<AZURE_COSMOS_DATABASE_USERNAME>",
+        "password": "<AZURE_COSMOS_DATABASE_PASSWORD>"
+    },
+    "azure_function": {
+        "key": "<AZURE_FUNCTION_KEY>",
+        "domain": "<AZURE_FUNCTION_DOMAIN>"
+    },
+    "azure_insights": {
+        "connection_string": "<AZURE_INSIGHTS_CONNECTION_STRING>"
+    }
+}
