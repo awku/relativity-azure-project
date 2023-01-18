@@ -94,6 +94,7 @@ app_service_plan = azure_native.web.AppServicePlan(
     kind="app",
     location=locations[4],
     name="appsp",
+    reserved=True,
     resource_group_name=resource_group.name,
     sku=azure_native.web.SkuDescriptionArgs(
         capacity=1,
@@ -210,6 +211,13 @@ app_role_assignment3 = azuread.AppRoleAssignment(
     resource_object_id=msgraph_service_principal.object_id,
 )
 
+app_role_assignment4 = azuread.ServicePrincipalDelegatedPermissionGrant(
+    "projectapproleassignment4",
+    service_principal_object_id=project_service_principal.object_id,
+    resource_service_principal_object_id=msgraph_service_principal.object_id,
+    claim_values=["offline_access", "openid"],
+)
+
 project_application_password = azuread.ApplicationPassword(
     "projectpassword",
     application_object_id=project_application.object_id,
@@ -294,8 +302,11 @@ app = azure_native.web.WebApp(
     location=app_service_plan.location,
     resource_group_name=resource_group.name,
     server_farm_id=app_service_plan.id,
+    identity=azure_native.web.ManagedServiceIdentityArgs(
+        type="SystemAssigned",
+    ),
     site_config=azure_native.web.SiteConfigArgs(
-        python_version="3.9",
+        linux_fx_version="PYTHON|3.9",
         app_settings=[
             azure_native.web.NameValuePairArgs(
                 name="APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -322,8 +333,11 @@ app_dev = azure_native.web.WebAppSlot(
     location=app_service_plan.location,
     resource_group_name=resource_group.name,
     server_farm_id=app_service_plan.id,
+    identity=azure_native.web.ManagedServiceIdentityArgs(
+        type="SystemAssigned",
+    ),
     site_config=azure_native.web.SiteConfigArgs(
-        python_version="3.9",
+        linux_fx_version="PYTHON|3.9",
         app_settings=[
             azure_native.web.NameValuePairArgs(
                 name="APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -342,7 +356,6 @@ app_dev = azure_native.web.WebAppSlot(
         ],
     ),
 )
-
 
 storage_account_key1 = (
     pulumi.Output.all(resource_group.name, storage_account.name)
@@ -389,7 +402,7 @@ pulumi.export(
         current_subscription.subscription_id,
         resource_group.name,
         AZURE_WEBAPP_NAME,
-        'AZURE_WEBAPP_CREDENTIALS'
+        "AZURE_WEBAPP_CREDENTIALS",
     ).apply(lambda args: create_azure_credentials(*args)),
 )
 
@@ -401,7 +414,7 @@ pulumi.export(
         current_subscription.subscription_id,
         resource_group.name,
         AZURE_FUNCTIONAPP_NAME,
-        'AZURE_FUNCTIONAPP_CREDENTIALS'
+        "AZURE_FUNCTIONAPP_CREDENTIALS",
     ).apply(lambda args: create_azure_credentials(*args)),
 )
 

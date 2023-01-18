@@ -1,6 +1,6 @@
 import json
+import os
 import requests
-import subprocess
 
 def create_user_flow(user_flow_type, id, tenant_id, client_credential, client_id):
     graphAccessUrl = f'https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token'
@@ -31,8 +31,8 @@ def create_user_flow(user_flow_type, id, tenant_id, client_credential, client_id
 
 
 def create_azure_credentials(clientId, clientSecret, subscriptionId, resource_group, site_name, outputfile):
-    data = subprocess.run([f"az ad sp create-for-rbac --name \"myApp\" --role contributor --scopes /subscriptions/{subscriptionId}/resourceGroups/{resource_group}/providers/Microsoft.Web/sites/{site_name} --sdk-auth > {outputfile}.json"])
-    return data
+    os.system(f"az ad sp create-for-rbac --name \"creds{site_name}\" --role contributor --scopes /subscriptions/{subscriptionId}/resourceGroups/{resource_group}/providers/Microsoft.Web/sites/{site_name} --sdk-auth > {outputfile}.json")
+    return True
 
 def create_config_file(azure_host, client_id, client_credential, tenant_name, tenant_id, account_name, account_media_key, account_static_key, cosmosdb, key, domain, instrumentation_key, connection_string):
     username = cosmosdb[0].split(':')[1][2:]
