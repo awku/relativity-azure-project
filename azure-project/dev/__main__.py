@@ -98,10 +98,26 @@ app_service_plan = azure_native.web.AppServicePlan(
     resource_group_name=resource_group.name,
     sku=azure_native.web.SkuDescriptionArgs(
         capacity=1,
-        family="S",
-        name="S1",
-        size="S1",
-        tier="Standard",
+        family="F",
+        name="F1",
+        size="F1",
+        tier="Free",
+    ),
+)
+
+app_dev_service_plan = azure_native.web.AppServicePlan(
+    "appspdev",
+    kind="app",
+    location=locations[5],
+    name="appspdev",
+    reserved=True,
+    resource_group_name=resource_group.name,
+    sku=azure_native.web.SkuDescriptionArgs(
+        capacity=1,
+        family="F",
+        name="F1",
+        size="F1",
+        tier="Free",
     ),
 )
 
@@ -326,13 +342,12 @@ app = azure_native.web.WebApp(
     ),
 )
 
-app_dev = azure_native.web.WebAppSlot(
+app_dev = azure_native.web.WebApp(
     "appdev",
-    name=AZURE_WEBAPP_NAME,
-    slot="dev",
-    location=app_service_plan.location,
+    name=f"{AZURE_WEBAPP_NAME}-dev",
+    location=app_dev_service_plan.location,
     resource_group_name=resource_group.name,
-    server_farm_id=app_service_plan.id,
+    server_farm_id=app_dev_service_plan.id,
     identity=azure_native.web.ManagedServiceIdentityArgs(
         type="SystemAssigned",
     ),
@@ -394,30 +409,6 @@ pulumi.export(
     ).apply(lambda args: create_function_config_file(*args)),
 )
 
-pulumi.export(
-    "githubwebappcredentials",
-    pulumi.Output.all(
-        cicd_application.application_id,
-        cicd_application_password.value,
-        current_subscription.subscription_id,
-        resource_group.name,
-        AZURE_WEBAPP_NAME,
-        "AZURE_WEBAPP_CREDENTIALS",
-    ).apply(lambda args: create_azure_credentials(*args)),
-)
-
-pulumi.export(
-    "githubfunctionappcredentials",
-    pulumi.Output.all(
-        cicd_application.application_id,
-        cicd_application_password.value,
-        current_subscription.subscription_id,
-        resource_group.name,
-        AZURE_FUNCTIONAPP_NAME,
-        "AZURE_FUNCTIONAPP_CREDENTIALS",
-    ).apply(lambda args: create_azure_credentials(*args)),
-)
-
 function_storage_account = azure.storage.Account(
     "funsa",
     resource_group_name=resource_group.name,
@@ -429,7 +420,7 @@ function_storage_account = azure.storage.Account(
 function_service_plan = azure_native.web.AppServicePlan(
     "funsp",
     kind="functionapp",
-    location=locations[4],
+    location=locations[2],
     name="funsp",
     reserved=True,
     resource_group_name=resource_group.name,
@@ -440,16 +431,6 @@ function_service_plan = azure_native.web.AppServicePlan(
         size="Y1",
         tier="Dynamic",
     ),
-)
-
-fun_storage_account = azure_native.storage.StorageAccount(
-    "funstrgacc",
-    location=locations[4],
-    resource_group_name=resource_group.name,
-    sku=azure_native.storage.SkuArgs(
-        name=azure_native.storage.SkuName.STANDARD_LRS,
-    ),
-    kind=azure_native.storage.Kind.STORAGE,
 )
 
 function_app = azure_native.web.WebApp(
@@ -500,6 +481,42 @@ function_key = (
         )
     )
     .apply(lambda keys: keys.function_keys["default"])
+)
+
+pulumi.export(
+    "githubwebappcredentials",
+    pulumi.Output.all(
+        app.id,
+        cicd_application_password.value,
+        current_subscription.subscription_id,
+        resource_group.name,
+        AZURE_WEBAPP_NAME,
+        "AZURE_WEBAPP_CREDENTIALS",
+    ).apply(lambda args: create_azure_credentials(*args)),
+)
+
+pulumi.export(
+    "githubwebappdevcredentials",
+    pulumi.Output.all(
+        app_dev.id,
+        cicd_application_password.value,
+        current_subscription.subscription_id,
+        resource_group.name,
+        f"{AZURE_WEBAPP_NAME}-dev",
+        "AZURE_WEBAPP_DEV_CREDENTIALS",
+    ).apply(lambda args: create_azure_credentials(*args)),
+)
+
+pulumi.export(
+    "githubfunctionappcredentials",
+    pulumi.Output.all(
+        function_app.id,
+        cicd_application_password.value,
+        current_subscription.subscription_id,
+        resource_group.name,
+        AZURE_FUNCTIONAPP_NAME,
+        "AZURE_FUNCTIONAPP_CREDENTIALS",
+    ).apply(lambda args: create_azure_credentials(*args)),
 )
 
 pulumi.export(

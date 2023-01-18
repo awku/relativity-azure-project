@@ -7,7 +7,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
 tmp_folder = "/tmp"
-
+url_init = AZURE_CONFIG.azure_host
+idx = url_init.index('.')
+url = url_init[:idx] + '-dev' + url_init[idx:]
 
 class NotLoggedInTestCases(unittest.TestCase):
     def setUp(self):
@@ -33,11 +35,11 @@ class NotLoggedInTestCases(unittest.TestCase):
 
 
     def test_sees_not_signed_in_message(self):
-        self.browser.get(f"https://{AZURE_CONFIG.azure_host}")
+        self.browser.get(f"https://{url}")
         self.assertTrue("You're not signed in." in self.browser.page_source)
 
     def test_can_view_category_page(self):
-        self.browser.get(f"https://{AZURE_CONFIG.azure_host}")
+        self.browser.get(f"https://{url}")
         first_view = self.browser.find_element(
             By.ID, 'view_category0')
         first_view.click()
@@ -50,11 +52,11 @@ class NotLoggedInTestCases(unittest.TestCase):
         self.assertTrue(visible_new_page)
 
     def test_can_see_cart(self):
-        self.browser.get(f"https://{AZURE_CONFIG.azure_host}/cart")
+        self.browser.get(f"https://{url}/cart")
         self.assertTrue("Shopping Cart" in self.browser.page_source)
 
     def test_can_add_product_to_cart_and_see_it(self):
-        self.browser.get(f"https://{AZURE_CONFIG.azure_host}")
+        self.browser.get(f"https://{url}")
         category_first_view = self.browser.find_element(
             By.ID, 'view_category0')
         category_first_view.click()
@@ -72,7 +74,7 @@ class NotLoggedInTestCases(unittest.TestCase):
         self.assertTrue(product_name in self.browser.page_source)
 
     def test_cannot_access_order_history(self):
-        self.browser.get(f"https://{AZURE_CONFIG.azure_host}/order/history/")
+        self.browser.get(f"https://{url}/order/history/")
         self.assertTrue("401: Unauthorized" in self.browser.page_source)
 
     def tearDown(self):
@@ -95,7 +97,7 @@ class LoggedInTestCases(unittest.TestCase):
             options=self.chrome_options, executable_path="/usr/bin/chromedriver")
         self.browser.delete_all_cookies()
         self.browser.maximize_window()
-        self.browser.get(f"https://{AZURE_CONFIG.azure_host}")
+        self.browser.get(f"https://{url}")
         sign_in = self.browser.find_element(
             By.XPATH, '//*[@id="navbarCollapse"]/div/ul/li[1]/a')
         sign_in.click()
@@ -112,7 +114,7 @@ class LoggedInTestCases(unittest.TestCase):
         self.browser.find_element(By.ID, 'next').click()
 
     def test_sees_signed_in_message(self):
-        self.browser.get(f"https://{AZURE_CONFIG.azure_host}")
+        self.browser.get(f"https://{url}")
         self.assertTrue("You're signed in" in self.browser.page_source)
 
     def tearDown(self):
@@ -135,7 +137,7 @@ class LoggedInAdminTestCases(unittest.TestCase):
             options=self.chrome_options, executable_path="/usr/bin/chromedriver")
         self.browser.delete_all_cookies()
         self.browser.maximize_window()
-        self.browser.get(f"https://{AZURE_CONFIG.azure_host}")
+        self.browser.get(f"https://{url}")
         sign_in = self.browser.find_element(
             By.XPATH, '//*[@id="navbarCollapse"]/div/ul/li[1]/a')
         sign_in.click()
@@ -152,7 +154,7 @@ class LoggedInAdminTestCases(unittest.TestCase):
         self.browser.find_element(By.ID, 'next').click()
 
     def test_sees_signed_in_message(self):
-        self.browser.get(f"https://{AZURE_CONFIG.azure_host}")
+        self.browser.get(f"https://{url}")
         self.assertTrue("as an admin" in self.browser.page_source)
 
     def tearDown(self):

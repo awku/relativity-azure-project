@@ -35,9 +35,13 @@ DEBUG = True
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-ALLOWED_HOSTS = [AZURE_CONFIG.azure_host, '127.0.0.1']
+url_init = AZURE_CONFIG.azure_host 
+idx = url_init.index('.')
+url = url_init[:idx] + '-dev' + url_init[idx:]
 
-CSRF_TRUSTED_ORIGINS = [f'https://{AZURE_CONFIG.azure_host}']
+ALLOWED_HOSTS = [url_init, url, '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = [f'https://{url_init}',f'https://{url}']
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
