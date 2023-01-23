@@ -85,6 +85,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'project.context_processors.context'
             ],
+            'libraries': {
+                'filter': 'custom.templatetags.appname_tags',
+            }
         },
     },
 ]

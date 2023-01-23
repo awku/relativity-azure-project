@@ -107,15 +107,16 @@ class LoggedInTestCases(unittest.TestCase):
 
         username_input = self.browser.find_element(By.ID, 'email')
         username_input.clear()
-        username_input.send_keys("test_user@test.pl")
+        username_input.send_keys("test_user@akrelativity.onmicrosoft.com")
         password_input = self.browser.find_element(By.ID, 'password')
         password_input.clear()
         password_input.send_keys("1P@ssw0rd!")
         self.browser.find_element(By.ID, 'next').click()
 
     def test_sees_signed_in_message(self):
-        self.browser.get(f"https://{url}")
-        self.assertTrue("You're signed in" in self.browser.page_source)
+        WebDriverWait(self.browser, 20).until(
+            EC.presence_of_element_located((By.ID, "view_category0")))
+        self.assertTrue("re signed in" in self.browser.page_source)
 
     def tearDown(self):
         self.browser.delete_all_cookies()
@@ -147,14 +148,15 @@ class LoggedInAdminTestCases(unittest.TestCase):
 
         username_input = self.browser.find_element(By.ID, 'email')
         username_input.clear()
-        username_input.send_keys("test_admin@test.pl")
+        username_input.send_keys("test_admin@akrelativity.onmicrosoft.com")
         password_input = self.browser.find_element(By.ID, 'password')
         password_input.clear()
         password_input.send_keys("!P@ssw0rd1")
         self.browser.find_element(By.ID, 'next').click()
 
     def test_sees_signed_in_message(self):
-        self.browser.get(f"https://{url}")
+        WebDriverWait(self.browser, 20).until(
+            EC.presence_of_element_located((By.ID, "view_category0")))
         self.assertTrue("as an admin" in self.browser.page_source)
 
     def tearDown(self):

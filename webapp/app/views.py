@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from custom.helpers import is_member_of_admins, confirm_order
 import logging
+from bson import ObjectId
 
 ms_identity_web = settings.MS_IDENTITY_WEB
 logger = logging.getLogger()
@@ -169,7 +170,10 @@ def add_order(request):
 def get_thanks_page(request, order_id):
     logger.info(f"function: get_thanks_page, order_id: {order_id}")
     if order_id:
-        _ = get_object_or_404(Order, _id=order_id)
+        if isinstance(order_id, str):
+            _ = get_object_or_404(Order, _id=ObjectId(order_id))
+        else:
+            _ = get_object_or_404(Order, _id=order_id)
     return render(request, 'app/order/thanks.html', {'order_id': order_id})
 
 
@@ -178,16 +182,15 @@ def get_orders_history(request):
     email_address = get_email_from_claims(request.identity_context_data._id_token_claims)
     logger.info(f"function: get_orders_history, email_address: {email_address}")
     order_details = Order.objects.filter(email_address=email_address)
-    output_order = list(order_details)
-    print(output_order)
-    return render(request, 'app/order/orders_list.html', {'order_details': output_order})
+    return render(request, 'app/order/orders_list.html', {'order_details': order_details})
 
 
 @ms_identity_web.login_required
 def get_order(request, order_id):
     logger.info(f"function: get_order, order_id: {order_id}")
-    order = get_object_or_404(Order, _id=order_id)
-    order_items = OrderItem.objects.filter(order_key=order_id)
+    or_id = ObjectId(order_id)
+    order = get_object_or_404(Order, _id=or_id)
+    order_items = OrderItem.objects.filter(order_key=or_id)
     return render(request, 'app/order/order_detail.html', {'order': order, 'order_items': order_items})
 
 def get_categories(request):

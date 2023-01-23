@@ -1,5 +1,6 @@
 {% extends '../base.html' %}
 {% load static %}
+{% load filter %}
 {% block title %}Order history{% endblock %}
 {% block content %}
     <div>
@@ -18,11 +19,11 @@
                     <tbody>
                         {% for order in order_details %}
                             <tr>
-                                <td>{{ order.id }}</td>
+                                <td>{{ order|mongo_id }}</td>
                                 <td>{{ order.created|date:"d M Y" }}</td>
                                 <td>${{ order.total }}</td>
                                 <td>
-                                    <a href="{% url 'get_order' order.id %}">View order</a>
+                                    <a href="{% url 'get_order' order|mongo_id %}">View order</a>
                                 </td>
                             </tr>
                         {% endfor %}

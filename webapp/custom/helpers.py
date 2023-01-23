@@ -42,7 +42,7 @@ def is_member_of_admins(oid, config):
 
 
 def confirm_order(email, order_id, config):
-    functionUrl = f'https://{config.domain}.azurewebsites.net/api/HttpTrigger?code={config.key}'
+    functionUrl = f'https://{config.domain}.azurewebsites.net/api/HttpTrigger?code={config.key}&clientId=default'
     functionBody = {
         "email": email,
         "order_id": order_id

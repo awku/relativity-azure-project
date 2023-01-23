@@ -18,11 +18,11 @@ urlpatterns = [
     path('cart/delete/', views.delete_cart, name='delete_cart'),
 
     path('order/add/', views.add_order, name='add_order'),
-    path('order/thanks/<slug:order_id>/',
+    path('order/thanks/<str:order_id>/',
          views.get_thanks_page, name='get_thanks_page'),
     path('order/history/', views.get_orders_history,
          name='get_orders_history'),
-    path('order/<slug:order_id>/', views.get_order,
+    path('order/<str:order_id>/', views.get_order,
          name='get_order'),
 
     path('products/add/', views.add_product, name='add_product'),
