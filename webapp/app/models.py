@@ -1,7 +1,6 @@
 from djongo import models
 from custom.helpers import randomize_path
 
-
 class Category(models.Model):
     _id = models.ObjectIdField()
     name = models.CharField(max_length=250, unique=True)
@@ -56,6 +55,8 @@ class CartItem(models.Model):
 
 
 class OrderItem(models.Model):
+    _id = models.ObjectIdField()
+    order_key = models.CharField(max_length=250)
     product_name = models.CharField(max_length=250)
     product_slug = models.CharField(max_length=250)
     quantity = models.IntegerField()
@@ -63,8 +64,10 @@ class OrderItem(models.Model):
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        abstract = True
+        ordering = ['-_id']
 
+    def __str__(self):
+        return self.product_name
 
 class Order(models.Model):
     _id = models.ObjectIdField()
@@ -90,12 +93,11 @@ class Order(models.Model):
     cc_expiration = models.CharField(max_length=5)
     cc_cvv = models.CharField(max_length=3)
 
-    items = models.ArrayField(model_container=OrderItem)
     objects = models.DjongoManager()
 
     class Meta:
         ordering = ['-_id']
 
     def __str__(self):
-        return self._id
+        return str(self._id)
 

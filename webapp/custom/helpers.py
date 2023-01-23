@@ -11,11 +11,12 @@ def randomize_path(instance, filename):
 
 
 def get_aad_b2c_config(config):
+    config_tenant_name = (config.tenant_name).split(".")[0]
     dict_data = {
         "type": {"client_type": "CONFIDENTIAL", "authority_type": "B2C", "framework": "DJANGO"},
         "client": {"client_id": config.client_id,
                    "client_credential": config.client_credential,
-                   "authority": f"https://{config.tenant_name}.b2clogin.com/{config.tenant_name}.onmicrosoft.com"},
+                   "authority": f"https://{config_tenant_name}.b2clogin.com/{config_tenant_name}.onmicrosoft.com"},
         "b2c": {"susi": "/b2c_1_signupsignin", "profile": "/b2c_1_editprofile", "password": "/b2c_1_resetpassword"},
         "auth_request": {"redirect_uri": None, "scopes": [""], "response_type": "code"},
         "django": {"id_web_configs": "MS_ID_WEB_CONFIGS",
@@ -47,7 +48,7 @@ def confirm_order(email, order_id, config):
         "order_id": order_id
     }
     response = requests.post(functionUrl, functionBody)
-
+    print(response)
     return response.status_code == 200
 
 def return_insights_script(insight_key):

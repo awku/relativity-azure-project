@@ -161,7 +161,8 @@ project_application = azuread.Application(
     ),
     fallback_public_client_enabled=True,
     web=azuread.ApplicationWebArgs(
-        redirect_uris=[f"https://{AZURE_WEBAPP_NAME}.azurewebsites.net/auth/redirect"],
+        redirect_uris=[f"https://{AZURE_WEBAPP_NAME}.azurewebsites.net/auth/redirect",
+        f"https://{AZURE_WEBAPP_NAME}-dev.azurewebsites.net/auth/redirect"],
         implicit_grant=azuread.ApplicationWebImplicitGrantArgs(
             access_token_issuance_enabled=True,
             id_token_issuance_enabled=True,
@@ -255,7 +256,7 @@ blob_media_container = azure_native.storage.BlobContainer(
     public_access=azure_native.storage.PublicAccess.BLOB,
     account_name=storage_account.name,
     container_name="media",
-    default_encryption_scope="encryptionscope185",
+    default_encryption_scope="$account-encryption-key",
     deny_encryption_scope_override=True,
     resource_group_name=resource_group.name,
 )
@@ -265,7 +266,7 @@ blob_static_container = azure_native.storage.BlobContainer(
     public_access=azure_native.storage.PublicAccess.BLOB,
     account_name=storage_account.name,
     container_name="static",
-    default_encryption_scope="encryptionscope185",
+    default_encryption_scope="$account-encryption-key",
     deny_encryption_scope_override=True,
     resource_group_name=resource_group.name,
 )
@@ -405,7 +406,7 @@ email_connection_string = (
 pulumi.export(
     "functionconfig",
     pulumi.Output.all(
-        email_domain.mail_from_sender_domain, email_connection_string
+        app.name, email_domain.mail_from_sender_domain, email_connection_string
     ).apply(lambda args: create_function_config_file(*args)),
 )
 
@@ -714,3 +715,62 @@ workflow = azure_native.logic.Workflow(
     resource_group_name=resource_group.name,
     workflow_name="injectb2cdata",
 )
+
+action_group = azure_native.insights.ActionGroup("actiongroup",
+    action_group_name="AdminActionGroup",
+    arm_role_receivers=[],
+    automation_runbook_receivers=[],
+    azure_app_push_receivers=[],
+    azure_function_receivers=[],
+    email_receivers=[
+        {
+            "emailAddress": "akus@student.agh.edu.pl",
+            "name": "Alert email",
+            "useCommonAlertSchema": False,
+            "status": "Enabled"
+        }
+    ],
+    enabled=True,
+    group_short_name="Admin alert",
+    itsm_receivers=[],
+    location="Global",
+    logic_app_receivers=[],
+    resource_group_name=resource_group.name,
+    sms_receivers=[],
+    voice_receivers=[],
+    webhook_receivers=[])
+
+scheduled_query_rule = azure_native.insights.ScheduledQueryRule("scheduledQueryRule",
+    action=azure_native.insights.AlertingActionArgs(
+        azns_action=azure_native.insights.AzNsActionGroupArgs(
+            action_group=["AdminActionGroup"],
+            email_subject="Email Header",
+        ),
+        odata_type="Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
+        severity="2",
+        trigger=azure_native.insights.TriggerConditionArgs(
+            metric_trigger=azure_native.insights.LogMetricTriggerArgs(
+                metric_column="CorrelationId",
+                metric_trigger_type="Total",
+                threshold=3,
+                threshold_operator="GreaterThan",
+            ),
+            threshold=3,
+            threshold_operator="GreaterThan",
+        ),
+    ),
+    description="log alert description",
+    enabled="true",
+    location=locations[1],
+    resource_group_name=resource_group.name,
+    rule_name="Failed signin for an admin!",
+    schedule=azure_native.insights.ScheduleResponseArgs(
+        frequency_in_minutes=5,
+        time_window_in_minutes=30,
+    ),
+    source=azure_native.insights.SourceArgs(
+        data_source_id=b2c_analytics_workspace.id,
+        query=" SigninLogs | where ResultType != 0 | join kind=innerunique ITPC_CTX_ADUsers_CL on $left.AlternateSignInName == $right.userPrincipalName_s",
+        query_type="ResultCount",
+    ),
+    tags={})

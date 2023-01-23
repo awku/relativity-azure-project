@@ -75,8 +75,9 @@ def create_config_file(azure_host, client_id, client_credential, tenant_name, te
 
     return data
 
-def create_function_config_file(email_domain, email_connection_string):
+def create_function_config_file(azure_host, email_domain, email_connection_string):
     data = {
+        "azure_host": azure_host,
         "email_domain": email_domain,
         "email_connection_string": email_connection_string
     }
