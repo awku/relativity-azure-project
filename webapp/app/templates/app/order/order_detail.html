@@ -10,10 +10,10 @@
                 <tr>
                     <td class="text-left" colspan="2">
                         <p>
-                            Order: </b>#{{ order|mongo_id }}<b>
+                            <b>Order: #{{ order|mongo_id }}</b>
                         </p>
                         <p>
-                            {{ order.created|date:"d M Y" }}<b>Date: </b>
+                            <b>Date: </b>{{ order.created|date:"d M Y" }}
                         </p>
                         <p>
                             <b>Order Total: </b>{{ order.total }}

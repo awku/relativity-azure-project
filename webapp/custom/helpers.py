@@ -42,13 +42,8 @@ def is_member_of_admins(oid, config):
 
 
 def confirm_order(email, order_id, config):
-    functionUrl = f'https://{config.domain}.azurewebsites.net/api/HttpTrigger?code={config.key}&clientId=default'
-    functionBody = {
-        "email": email,
-        "order_id": order_id
-    }
-    response = requests.post(functionUrl, functionBody)
-    print(response)
+    functionUrl = f'https://{config.domain}.azurewebsites.net/api/HttpTrigger?code={config.key}&clientId=default&email={email}&order_id={order_id}'
+    response = requests.get(functionUrl)
     return response.status_code == 200
 
 def return_insights_script(insight_key):

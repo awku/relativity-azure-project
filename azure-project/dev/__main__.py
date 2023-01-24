@@ -606,7 +606,7 @@ api_connection = azure_native.web.Connection(
 )
 
 admin_group_object_id = pulumi.Output.all(admin_group).apply(
-    lambda keys: keys.object_id
+    lambda keys: f"{keys.object_id}"
 )
 
 workflow = azure_native.logic.Workflow(

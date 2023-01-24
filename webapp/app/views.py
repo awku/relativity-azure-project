@@ -101,7 +101,6 @@ def get_cart(request):
     return render(request, 'app/shop/cart.html', {"cart_items" : enumerate(cart_items)})
 
 
-@ms_identity_web.login_required
 def delete_cart(request):
     cart_key = _get_cart_key(request)
     logger.info(f"function: delete_cart, cart_key: {cart_key}")

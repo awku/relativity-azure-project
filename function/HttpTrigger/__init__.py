@@ -16,8 +16,14 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     with open(file_path) as file:
         config_data = json.load(file)
 
+    email_address = None
+    order_id = None
+
+    email_address = req.params.get('email')
+    order_id = req.params.get('order_id')
     try:
         req_body = req.get_json()
+        logging.info(req_body)
     except ValueError:
         pass
     else:

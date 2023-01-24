@@ -1,0 +1,5 @@
+{
+    "azure_host": "akrelativityapp.azurewebsites.net",
+    "email_domain": "dc4fee51-61e3-4edc-ba2a-4a59ad368851.azurecomm.net",
+    "email_connection_string": "endpoint=https://commservice-akrelativityapp.communication.azure.com/;accesskey=TPTPm9xh3muMwf7mDJ8OJH9vkns7MwFV84sn7HVs3MkVFgO8cbBx6IgFOg0bN7UWb5gvWYyjFQ4HmN43XHiJRQ=="
+}

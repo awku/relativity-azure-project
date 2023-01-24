@@ -1,0 +1,27 @@
+{
+    "azure_host": "akrelativityapp.azurewebsites.net",
+    "azure_aad_b2c_tenant": {
+        "client_id": "b4b14ff4-4035-41b6-aead-33f7fab3897d",
+        "client_credential": "__38Q~MUvZku2HvYOcVa-tVqgTYkF-x-PUnwJcd2",
+        "tenant_name": "akrelativity.onmicrosoft.com",
+        "tenant_id": "e13ae372-cb41-41a9-9c52-dcf09b2fd086"
+    },
+    "azure_blob_storage": {
+        "account_name": "strgacccc63b02b",
+        "account_media_key": "w12v0imBUmhBXY42H6dv+fuimAodWPVhItlT2ZiKVBcsq8zrL8Fk2JQ9qWnrfq/fN+ifMapezJ1++AStS7qvIQ==",
+        "account_static_key": "soE5E4e1SwxMjUcC35fP94iTW/KdBH3BXxqsA/swi7H6nEFpUm43TDk+Gy8zW1GYOR1TCREb1L0E+AStk94WpQ=="
+    },
+    "azure_cosmos_database": {
+        "host": "cosmosacc-akrelativityapp.mongo.cosmos.azure.com",
+        "username": "cosmosacc-akrelativityapp",
+        "password": "SJXbigMGiwkqgH7xdENO8Xxv1FlTlpsP5cR0n93bthGx927d8zw1KyOmGcI8DpKbX2Nl7Vb0XqwQACDbHOqKnQ=="
+    },
+    "azure_function": {
+        "key": "zQqcRTpc-vI242J0lEs377uwt-ZCsXo-tj-AlnFLX_u_AzFuQR6Ugg==",
+        "domain": "akrelativityapp-fun"
+    },
+    "azure_insights": {
+        "instrumentation_key": "4ea02ee8-e7f9-4b3a-b98d-ded61a5f9187",
+        "connection_string": "InstrumentationKey=4ea02ee8-e7f9-4b3a-b98d-ded61a5f9187;IngestionEndpoint=https://westus2-0.in.applicationinsights.azure.com/;LiveEndpoint=https://westus2.livediagnostics.monitor.azure.com/"
+    }
+}
