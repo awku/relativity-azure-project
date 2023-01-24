@@ -148,7 +148,7 @@ class LoggedInAdminTestCases(unittest.TestCase):
 
         username_input = self.browser.find_element(By.ID, 'email')
         username_input.clear()
-        username_input.send_keys("test_admin@akrelativity.onmicrosoft.com")
+        username_input.send_keys("test_adminerror@akrelativity.onmicrosoft.com")
         password_input = self.browser.find_element(By.ID, 'password')
         password_input.clear()
         password_input.send_keys("!P@ssw0rd1")
